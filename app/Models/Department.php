@@ -23,20 +23,24 @@ class Department extends Model
     }
     public function subjects(): BelongsToMany
     {
-        return $this->belongsToMany(Subject::class, 'department_subject', 'department_id', 'subject_id')
-            ->withTimestamps();
+        return $this->belongsToMany(
+            Subject::class,
+            'department_subject',   // pivot table
+            'department_id',        // foreign key on pivot
+            'subject_id'            // related key on pivot
+        )->withTimestamps();
     }
+
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class, 'department_student', 'department_id', 'student_id')
             ->withTimestamps();
     }
 
-     public function levels(): BelongsToMany
-{
-    return $this->belongsToMany(Level::class, 'department_level', 'department_id', 'level_id')
-        ->withPivot('year_id')
-        ->withTimestamps();
-}
-
+    public function levels(): BelongsToMany
+    {
+        return $this->belongsToMany(Level::class, 'department_level', 'department_id', 'level_id')
+            ->withPivot('year_id')
+            ->withTimestamps();
+    }
 }

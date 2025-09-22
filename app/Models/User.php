@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -25,7 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'school_id',
-        'avatar'
+        'avatar',
+        'is_activated'
     ];
 
     /**
@@ -56,7 +59,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(School::class);
     }
 
-  
+  public function lessonNotes(): HasMany
+    {
+        return $this->hasMany(LessonNote::class);
+    }
+public function teacher():HasOne
+{
+    return $this->hasOne(Teacher::class, 'user_id');
+}
 
-    
+public function isSuperAdmin(): bool
+{
+    return $this->hasRole('super-admin');
+}
+
 }

@@ -5,7 +5,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
+    {{--
+    <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
 
     <title>{{ $title ?? 'EDUCO-SMS' }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -36,6 +37,9 @@
                 @if (isset($header))
                 <h1 class="text-2xl font-bold mb-6 inline">{{ $header }}</h1>
                 @endif
+                <p class="bg-purple-500 text-white font-extrabold uppercase w-full m-2 p-2" wire:offline>
+                    Whoops, your device has lost connection. The web page you are viewing is offline.
+                </p>
                 {{ $slot }}
             </div>
 
@@ -44,6 +48,7 @@
             <livewire:fragment.footer />
         </main>
     </div>
+
 
     <!-- JS -->
     <script>
@@ -62,8 +67,8 @@
       document.getElementById('avatarMenu').classList.toggle('hidden');
     });
     </script>
- <!-- Chart.js -->
-   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         const ctx = document.getElementById('genderChart').getContext('2d');
     new Chart(ctx, {

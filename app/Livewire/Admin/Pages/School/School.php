@@ -21,7 +21,7 @@ class School extends Component
     public $newLogo;
     public $editingSchoolId;
     public $showEdit = false; // toggle edit state
-    public $school_name, $address,  $phone_no, $date_of_establishment, $proprietor, $type,$email;
+    public $school_name, $school_head_title, $address,$motto,  $phone_no, $date_of_establishment, $proprietor, $type,$email;
 
    public function mount()
 {
@@ -32,10 +32,12 @@ class School extends Component
             $this->school_name = $this->school->school_name;
             $this->address = $this->school->address;
           $this->email = $this->school->email;
+          $this->motto = $this->school->motto;
             $this->phone_no = $this->school->phone_no;
             $this->date_of_establishment = $this->school->date_of_establishment
                 ? \Carbon\Carbon::parse($this->school->date_of_establishment)->format('Y-m-d')
                 : null;
+            $this->school_head_title = $this->school->school_head_title;
             $this->proprietor = $this->school->proprietor;
             $this->type = $this->school->type;
              $this->editingSchoolId = $this->school->id;
@@ -57,6 +59,8 @@ public function updateSchool()
         'date_of_establishment' => 'nullable|date',
         'proprietor' => 'nullable|string|max:255',
         'type' => 'required|in:primary,secondary',
+        'motto'=> 'required',
+        'school_head_title'=>'required'
     ]);
 
     $this->school->update([
@@ -67,6 +71,8 @@ public function updateSchool()
         'date_of_establishment' => $this->date_of_establishment,
         'proprietor' => $this->proprietor,
         'type' => $this->type,
+        'motto'=> $this->motto,
+        'school_head_title' =>$this->school_head_title,
     ]);
 
     $this->school->refresh();

@@ -17,7 +17,8 @@ return new class extends Migration
             $table->string('end_year');
             $table->enum('term', ['first', 'second', 'third'])->default('first');
             $table->enum('status', ['active', 'inactive'])->default('inactive');
-           
+
+          $table->unsignedBigInteger('school_id');
             $table->foreign('school_id')->references('id')->on('schools');
             $table->timestamps();
         });

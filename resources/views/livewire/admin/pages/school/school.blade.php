@@ -34,25 +34,26 @@
         <!-- School Details Section -->
         <div class="p-8 md:w-2/3">
             <div class="tracking-wide text-sm text-purple-600 dark:text-purple-400 font-semibold">School Information</div>
-            <h1 class="block uppercase mt-1 text-2xl leading-tight font-extrabold text-gray-900 dark:text-white">
-                {{ ucwords($school->school_name) }}
+            <h1 class="block  uppercase mt-1 text-2xl text-shadow leading-tight font-extrabold text-gray-900 dark:text-white">
+                {{ ucwords($school?->school_name) }}
             </h1>
+            <span class="text-xs italic text-shadow">  Motto: {{ $school?->motto ?:'--' }}</span>
             <p class="mt-4 text-gray-600 dark:text-gray-300">
                 Welcome to the admin panel for
-                <span class="text-green-900 dark:text-green-500 font-extrabold">{{ ucwords($school->school_name) }}</span>.
+                <span class="text-green-900 dark:text-green-500 font-extrabold">{{ ucwords($school?->school_name) }}</span>.
                 Here you can manage various aspects of your school.
             </p>
 
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-6 text-gray-700 dark:text-gray-200">
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Address</p>
-                    <p class="mt-1 text-base">{{ $school->address }}, {{ $school->city }}, {{ $school->state }} {{ $school->zip_code }}</p>
+                    <p class="mt-1 text-base">{{ $school?->address }}, {{ $school?->city }}, {{ $school?->state }} {{ $school?->zip_code }}</p>
                 </div>
                 <div>
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</p>
-                    <a href="mailto:{{ $school->email ?: '#' }}"
+                    <a href="mailto:{{ $school?->email ?: '#' }}"
                         class="mt-1 text-base text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
-                        {{ $school->email ?: '--' }}
+                        {{ $school?->email ?: '--' }}
                     </a>
                 </div>
                 <div>
@@ -83,6 +84,12 @@
                     <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Proprietor</p>
                     <p class="mt-1 text-base text-purple-600 dark:text-purple-400">
                         {{ $school->proprietor ?: '--' }}
+                    </p>
+                </div>
+                 <div>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">School Head Title</p>
+                    <p class="mt-1 text-base text-purple-600 dark:text-purple-400">
+                        {{ $school->school_head_title ?: '--' }}
                     </p>
                 </div>
             </div>
@@ -116,6 +123,12 @@
                     class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2" />
                 <x-input-error class="mt-2" :messages="$errors->get('school_name')" />
 
+
+                     <!-- School Motto -->
+                <x-input-label for="motto" :value="__('School Motto')" />
+                <input type="text" wire:model.defer="motto"
+                    class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2" />
+                <x-input-error class="mt-2" :messages="$errors->get('motto')" />
                 <!-- Address -->
                 <x-input-label for="address" :value="__('School Address')" />
                 <input type="text" wire:model.defer="address"
@@ -133,6 +146,12 @@
                 <input type="text" wire:model.defer="phone_no"
                     class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2" />
                 <x-input-error class="mt-2" :messages="$errors->get('phone_no')" />
+
+                  <!-- Phone -->
+                <x-input-label for="school_head_title" :value="__('School Head Title')" />
+                <input type="text" wire:model.defer="school_head_title"
+                    class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2" />
+                <x-input-error class="mt-2" :messages="$errors->get('school_head_title')" />
 
                 <!-- Date -->
                 <x-input-label for="date_of_establishment" :value="__('Date of Establishment')" />

@@ -1,9 +1,10 @@
 <?php
 namespace App\Services;
 
-
+use App\Models\Student;
 use App\Models\User;
 use App\Notifications\WelcomeUser;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class GenerateUserService{
 
@@ -31,11 +32,13 @@ class GenerateUserService{
     }
 
 
-   public static  function createUser($email, $school_id, $role): User{
+   public static  function createUser($name,$email, $school_id, $role): User{
      $data = [];
      $data['password']= self::generatePassword();
      $data['school_id']= $school_id;  
      $data['email']= $email;
+     $data['name']= $name;
+     $data['is_activated'] = true;
     $user = User::create($data);
     $user->assignRole($role);
     $user->notify(new WelcomeUser($user));
@@ -43,4 +46,19 @@ class GenerateUserService{
     return $user;
 
    }
+  // remove: use phpDocumentor\Reflection\Types\Boolean;
+
+public static function deActivateUser($student_id): bool
+{
+    $student = Student::findOrFail($student_id);
+    $user  = User::findOrFail($student->user_id);
+
+    return $user->update([
+        'is_activated' => false,
+    ]);
+}
+
+
+
+
 }

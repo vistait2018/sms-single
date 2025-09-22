@@ -17,6 +17,8 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->unsignedBigInteger('teacher_id');
             $table->unsignedBigInteger('year_id');
+            $table->unsignedBigInteger('level_id');
+             $table->foreign('level_id')->references('id')->on('levels')->onDelete('cascade');
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->foreign('year_id')->references('id')->on('years')->onDelete('cascade');
             $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');

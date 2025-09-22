@@ -21,8 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\WithPagination;
-use Illuminate\Support\Facades\Log;
-use phpDocumentor\Reflection\DocBlock\Tags\Generic;
+
 
 #[Layout('layouts.app')]
 #[Title('School Student Registration')]
@@ -31,7 +30,7 @@ class StudentRegister extends Component
     use WithFileUploads;
     use WithPagination;
 
-    public $first_name, $middle_name, $last_name, $sex=null;
+    public $first_name, $middle_name, $last_name, $sex = null ;
     public $phone_no, $address, $dob, $state_id, $lga_id;
     public $religion, $nationality, $state_of_origin;
 
@@ -49,38 +48,36 @@ class StudentRegister extends Component
     public $UserEditId = null;
     public $studentId;
     public $email;
-
-
-
-
     public $avatar;    // for new student
     public $avatars = []; // for updating existing student avatars
     public $states = [];
-private function resetStudentForm()
-{
-    $this->reset([
-        'first_name',
-        'middle_name',
-        'last_name',
-        'sex',
-        'phone_no',
-        'address',
-        'dob',
-        'religion',
-        'selectedReligion',
-        'nationality',
-        'selectedState',
-        'selectedLga',
-        'selectLevel',
-        'lgas',
-    ]);
-}
+    private function resetStudentForm()
+    {
+        $this->reset([
+            'first_name',
+            'middle_name',
+            'last_name',
+            'sex',
+            'phone_no',
+            'address',
+            'dob',
+            'religion',
+            'selectedReligion',
+            'nationality',
+            'selectedState',
+            'selectedLga',
+            'selectLevel',
+            'lgas',
+            'sex',
+
+        ]);
+    }
 
 
     public function mount()
     {
         $this->states = \App\Models\State::all();
-       
+
         //$this->lgas   = \App\Models\Lga::all(); // load all LGAs once
     }
     public function updatedSelectedState($stateId)
@@ -95,39 +92,77 @@ private function resetStudentForm()
 
         $this->selectedLga = null;
     }
-    public function addUser(int $student_id){
-      $this->studentId = $student_id;
-       $this->dispatch('open-modal', 'addUser');
-    }
- public function notifyUser(OtpService $otpService,GenerateUserService $generalUserService)
-{
-    $validated = $this->validate([
-        'email' => 'required|email|unique:users,email',
-    ]);
+    public function addUser(int $student_id)
+    {
+        $this->studentId = $student_id;
+        $student = Student::findOrFail($this->studentId);
 
-    $student = Student::findOrFail($this->studentId);
-    $validMinutes = 10;
+        // If the student has no linked user → open modal
+        if (!$student->user_id) {
+            $this->dispatch('open-modal', 'addUser');
+            return;
+        }
 
-    if (!$student->user_id) {
-        // call static method directly
-        $user = $generalUserService::createUser($this->email, $student->id, 'student');
-
-        $user->update(['is_activated' => false]);
-        $student->update(['user_id' => $user->id]);
-    } else {
         $user = User::findOrFail($student->user_id);
+
+        // If the linked user has no email → open modal
+        if (empty($user->email)) {
+            $this->dispatch('open-modal', 'addUser');
+            return;
+        }
+
+        // If the user exists and has an email → activate user
+        $user->update(['is_activated' => true]);
     }
 
-    $otpCode = $otpService->generateOtpCode($user->id, $validMinutes);
-    $user->notify(new OTPNotification($user, $otpCode, $validMinutes));
 
-    session()->flash('success', 'OTP has been sent to the user.');
-}
-
+    public function notifyUser(GenerateUserService $generalUserService)
+    {
+        $student = Student::findOrFail($this->studentId);
 
 
-     public function removeUser($student_id){
 
+        // Validate a new email from the modal input
+        $validated = $this->validate([
+            'email' => 'required|email|unique:users,email',
+        ]);
+        $this->email = $validated['email'];
+
+
+        $validMinutes = 10;
+
+        // If student has no user, create one
+        if (!$student->user_id) {
+            $name = $student->last_name . ' ' . $student->first_name;
+            $user = $generalUserService::createUser($name, $this->email, $student->id, 'student');
+
+            $user->update(['is_activated' => false]);
+            $student->update(['user_id' => $user->id]);
+        }
+
+        // Generate OTP and send notification
+        // $otpCode = $otpService->generateOtpCode($user->id, $validMinutes);
+        //$user->notify(new OTPNotification($user, $otpCode, $validMinutes));
+
+        session()->flash('success', 'OTP has been sent to the user.');
+    }
+
+
+    public function toggleStudentform()
+    {
+        $this->showStudentForm = !$this->showStudentForm;
+
+    // Now that we're switching to the form, clear any stale values
+    if ($this->showStudentForm) {
+        $this->resetStudentForm();
+        $this->resetValidation();
+    }
+    }
+
+    public function removeUser($student_id, GenerateUserService $generalUserService)
+    {
+
+        $user =  $generalUserService::deActivateUser($student_id);
     }
     public function updatedSelectedLga($lga_id)
     {
@@ -174,6 +209,11 @@ private function resetStudentForm()
     /**
      * Register a new student
      */
+
+    public function updatedSearch()
+{
+    $this->resetPage();
+}
     public function registerStudent(RegisterStudentService $service)
     {
 
@@ -239,11 +279,11 @@ private function resetStudentForm()
                 }
             });
 
-$this->resetExcept(['states', 'search']);
-$this->sex = null;
-$this->selectLevel = null;
-$this->selectedReligion = null;
-$this->lgas = [];
+            $this->resetExcept(['states', 'search']);
+            $this->sex = null;
+            $this->selectLevel = null;
+            $this->selectedReligion = null;
+            $this->lgas = [];
 
 
             $this->dispatch('saved');
@@ -288,34 +328,32 @@ $this->lgas = [];
     }
 
     public function showRegistrationForm()
-{
-     $this->resetStudentForm();
-    $this->showStudentForm = true;
-
-
-}
+    {
+        $this->resetStudentForm();
+        $this->showStudentForm = true;
+    }
 
     public function closeStudentModal()
     {
         $this->reset([
-        'selectedStudent',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'sex',
-        'phone_no',
-        'address',
-        'dob',
-        'religion',
-        'selectedReligion',
-        'nationality',
-        'selectedState',
-        'selectedLga',
-        'selectLevel',
-        'level',
-        'lgas',
-        'edit'
-    ]);
+            'selectedStudent',
+            'first_name',
+            'middle_name',
+            'last_name',
+            'sex',
+            'phone_no',
+            'address',
+            'dob',
+            'religion',
+            'selectedReligion',
+            'nationality',
+            'selectedState',
+            'selectedLga',
+            'selectLevel',
+            'level',
+            'lgas',
+            'edit'
+        ]);
 
         $this->dispatch('close-modal', 'editStudent');
     }
@@ -361,27 +399,33 @@ $this->lgas = [];
             ]);
         }
         session()->flash('success', 'Student updated successfully!');
-        $this->dispatch('close-modal', 'editStudent');
+        $this->edit = false;
+
+        $this->closeStudentModal();
     }
 
     public function render()
     {
-        $students = Student::with('levels', 'user')
-            ->where('school_id', Auth::user()->school_id)
-            ->when($this->search, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('first_name', 'like', "%{$this->search}%")
-                        ->orWhere('last_name', 'like', "%{$this->search}%")
-                        ->orWhere('sex', 'like', "%{$this->search}%");
-                });
-            })
-            ->latest()
-            ->paginate(5);
+       $students = Student::with('levels', 'user')
+    ->where('school_id', Auth::user()->school_id)
+    ->when($this->search, function ($query) {
+        $query->where(function ($q) {
+            $q->where('first_name', 'like', "%{$this->search}%")
+              ->orWhere('last_name', 'like', "%{$this->search}%")
+              ->orWhere('sex', 'like', "%{$this->search}%")
+              ->orWhereHas('levels', function ($levelQuery) {
+                  $levelQuery->where('name', 'like', "%{$this->search}%");
+              });
+        });
+    })
+    ->latest()
+    ->paginate(9);
 
-        return view('livewire.admin.pages.school.student-register', [
-            'students' => $students,
-            'levels'   => Level::where('school_id', Auth::user()->school_id)->get(),
-            // 'states'   => \App\Models\State::with('lgas')->get(),
-        ]);
+
+    return view('livewire.admin.pages.school.student-register', [
+        'students' => $students,
+        'levels'   => Level::where('school_id', Auth::user()->school_id)->get(),
+    ]);
+
     }
 }

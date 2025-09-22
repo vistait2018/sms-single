@@ -18,8 +18,15 @@ class EnsureSchoolAdmin
     {
 
          $user = Auth::user();
+       if (!$user) {
+            abort(403, 'Not authenticated');
+        }
 
-        if (! $user || ! $user->hasRole('school-admin') || $user->school->is_locked) {
+        if ($user->school && $user->school->is_locked) {
+            abort(403, 'School is locked');
+        }
+
+        if (! $user->hasRole('school-admin') ) {
             return abort(403,'Access denied - You are not authorised to use this page or your School has been locked' );
         }
 

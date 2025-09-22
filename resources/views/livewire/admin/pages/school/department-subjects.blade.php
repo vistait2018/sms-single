@@ -1,4 +1,4 @@
-<div class="p-4 space-y-6">
+<div class="p-4 space-y-6  bg-white dark:bg-gray-900">
      <!-- Total Departments -->
     <div class="flex justify-between items-center">
         <h2 class="text-lg font-bold">
@@ -17,7 +17,7 @@
         @foreach($departments as $department)
             <div wire:click="selectDepartment({{ $department->id }})"
                 class="cursor-pointer border rounded-xl p-4 shadow-sm hover:shadow-md transition
-                       {{ $selectedDepartment && $selectedDepartment->id === $department->id ? 'border-blue-500 bg-blue-50' : '' }}">
+                       {{ $selectedDepartment && $selectedDepartment->id === $department->id ? 'border-purple-500 bg-purple-50' : '' }}">
                 <h3 class="font-semibold text-lg">{{ $department->name }}</h3>
                 <p class="text-sm text-gray-500">{{ $department->subjects()->count() }} Subjects</p>
             </div>
@@ -50,7 +50,7 @@
                 @endforeach
             </div>
 
-            <button wire:click="saveSubjects"
+            <button wire:click="saveSubjects" wire:confirm.prompt="Are you sure?\n\nType SAVE to confirm|SAVE"
                 class="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-blue-700">
                 Save Changes
             </button>

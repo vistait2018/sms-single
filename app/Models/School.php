@@ -23,7 +23,9 @@ class School extends Model
         'school_logo',
         'type',
         'proprietor',
-        'is_locked'
+        'is_locked',
+        'motto',
+        'school_head_title',
     ];
 
     protected $casts = [
@@ -61,5 +63,30 @@ class School extends Model
     public function years(): HasMany
     {
         return $this->hasMany(Year::class);
+    }
+
+     public function lessonNotes(): HasMany
+    {
+        return $this->hasMany(LessonNote::class);
+    }
+
+    public function grades(): HasMany
+    {
+        return $this->hasMany(SchoolGrade::class);
+    }
+
+     public function gradeKeys(): HasMany
+    {
+        return $this->hasMany(SchoolGradeKey::class);
+    }
+
+     public function affective(): HasMany
+    {
+        return $this->hasMany(SchoolAffective::class);
+    }
+
+     public function physhomotorDomains(): HasMany
+    {
+        return $this->hasMany(SchoolPhyshomotor::class);
     }
 }

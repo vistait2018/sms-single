@@ -30,8 +30,11 @@ class Subject extends Model
 
 public function teachers(): BelongsToMany
 {
-    return $this->belongsToMany(Teacher::class, 'teacher_subject', 'subject_id', 'teacher_id')
+    return $this->belongsToMany(Teacher::class, 'subject_teachers', 'subject_id', 'teacher_id')
+        ->using(SubjectTeacher::class)  // 👈 use custom pivot
+        ->withPivot(['year_id', 'active', 'level_id'])
         ->withTimestamps();
 }
+
 
 }

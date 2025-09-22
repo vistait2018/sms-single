@@ -1,13 +1,18 @@
 <nav class="flex items-center justify-between px-4 py-3 bg-purple-900 text-gray-100 dark:bg-gray-700 shadow fixed top-0 left-0 right-0 z-20">
     @php
-        $presentSchoolSession = getDecryptedSchoolSession();
+        $presentSchoolSession = \App\Models\Year::where('school_id',auth()->user()->school_id)
+        ->where('status','active')->first();
        // dd($presentSchoolSession);
     @endphp
 
     <!-- Left -->
     <div class="flex items-center space-x-3">
-        <img src="https://flowbite.s3.amazonaws.com/logo.svg" alt="logo" class="h-8 w-auto" />
-        <span class="font-semibold text-lg">{{ env('APP_NAME','EDUCO-SMS') }}</span>
+        <img
+                class="h-8 w-auto object-contain rounded-full border-4 border-gray-200 dark:border-gray-600 shadow-md cursor-pointer hover:opacity-80 transition"
+                src="{{ auth()->user()?->school?->school_logo ? asset('storage/'.auth()->user()?->school?->school_logo) : 'https://via.placeholder.com/150' }}"
+                alt="{{ auth()->user()?->school?->school_logo }} Logo">
+        {{-- <img src="https://flowbite.s3.amazonaws.com/logo.svg" alt="logo" class="h-8 w-auto" /> --}}
+        <span class="font-semibold text-lg">{{ env('APP_NAME','EDUCO-SMS') }} | <span class="text-sm italic text-shadow">{{ ucwords(auth()->user()?->school?->school_name) }}</span>
 
         <!-- Hamburger (mobile only) -->
         <button id="hamburgerBtn" class="ml-3 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 lg:hidden">

@@ -19,4 +19,9 @@ class Year extends Model
     {
         return $this->belongsTo(School::class);
     }
+
+    public function weeks()
+{
+    return $this->hasMany(Week::class);
+}
 }

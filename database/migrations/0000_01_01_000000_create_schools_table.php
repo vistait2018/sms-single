@@ -22,7 +22,9 @@ return new class extends Migration
             $table->boolean('is_locked')->default(false);
             $table->string('longitude')->nullable();
             $table->string('latitude')->nullable();
+            $table->string('motto')->nullable();
             $table->string('school_logo')->nullable();
+            $table->string('school_head_title');
             $table->enum('type',['primary', 'secondary']);
           $table->string('proprietor')->nullable();
             $table->timestamps();

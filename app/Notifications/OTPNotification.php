@@ -47,16 +47,17 @@ class OTPNotification extends Notification
     // Call ipinfo.io (free tier) for geo data
 
 
-        $response = Http::withOptions([
-            'verify' => false,
-        ])->get("https://ipinfo.io/json?token=" . env('IPINFO_TOKEN'));
+      $response = Http::withOptions([
+    'verify' => false,
+])->get("https://ipinfo.io/json?token=" . env('IPINFO_TOKEN'));
 
+$city    = data_get($response->json(), 'city', 'Unknown City');
+$region  = data_get($response->json(), 'region', 'Unknown Region');
+$country = data_get($response->json(), 'country', 'Unknown Country');
+$loc     = data_get($response->json(), 'loc', 'Unknown coordinates'); // ipinfo uses "loc"
 
-    $city    = data_get($response->json(), 'city', 'Unknown City');
-    $region  = data_get($response->json(), 'region', 'Unknown Region');
-    $country = data_get($response->json(), 'country', 'Unknown Country');
-    $coordinates = data_get($response->json(),'Coordinates','Unknown coordinates');
-    $loginLocation = "{$city}, {$region}, {$country}, {$coordinates}";
+$loginLocation = "{$city}, {$region}, {$country}, {$loc}";
+
         $logoUrl       = config('app.url') . '/logo/logo.png';
         return (new MailMessage)
         ->subject('User OTP  Notification')

@@ -22,7 +22,7 @@ class RegisterTeacherService
             ]);
 
             $user->assignRole('teacher');
-           
+
 
             // Create teacher
             $teacher = Teacher::create([
@@ -34,6 +34,7 @@ class RegisterTeacherService
                 'date_of_employement' => $data['date_of_employement'] ?? null,
                 'sex' => $data['sex'] ?? null,
                 'dob' => $data['dob'] ?? null,
+                 'dob' => $data['details'] ?? null,
                 'phone_no' => $data['phone_no'] ?? null,
                 'religion' => $data['religion'] ?? null,
                 'national' => $data['national'] ?? 'nigerian',
@@ -43,9 +44,10 @@ class RegisterTeacherService
                 'level_id' => $data['level_id'] ?? null, // assign class-teacher
                 'school_id' => $data['school_id'],
                 'user_id' => $user->id,
+                'details'=>$data['details'],
             ]);
              $user->notify(new WelcomeUser($user));
-            return $teacher->load('user'); 
+            return $teacher->load('user');
         });
     }
 }

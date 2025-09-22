@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Level extends Model
 {
@@ -15,7 +16,7 @@ class Level extends Model
     protected $fillable = [
         'school_id',
         'name',
-       
+
     ];
 
     public function school(): BelongsTo
@@ -42,4 +43,15 @@ class Level extends Model
         ->withTimestamps();
 }
 
+  public function teachers(): BelongsToMany
+{
+    return $this->belongsToMany(Teacher::class, 'level_teacher', 'level_id', 'teacher_id')
+        ->withPivot(['year_id','active'])
+        ->withTimestamps();
+}
+
+ public function lessonNotes(): HasMany
+    {
+        return $this->hasMany(LessonNote::class);
+    }
 }

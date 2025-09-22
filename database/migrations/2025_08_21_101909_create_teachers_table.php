@@ -22,11 +22,13 @@ return new class extends Migration
             $table->enum('sex', ['male','female']);
             $table->string('dob')->nullable();
              $table->string('phone_no')->nullable();
-  $table->enum('religion',['chritianity','islam','others'])->nullable();
+              $table->enum('religion',['christianity','islam','others'])->nullable();
+               $table->string('details')->nullable();
             $table->string('national')->default('nigerian');
             $table->string('state_of_origin')->nullable();
             $table->string('previous_school_name')->nullable();
             $table->string('lga')->nullable();
+            $table->string('sign_url')->nullable();
             $table->unsignedBigInteger('level_id')->nullable();
             $table->foreign('level_id')->references('id')->on('levels');
             $table->unsignedBigInteger('user_id')->nullable();

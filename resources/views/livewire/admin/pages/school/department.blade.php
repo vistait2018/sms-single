@@ -18,7 +18,7 @@
         <input type="text" wire:model.live="search" placeholder="Search Departments..."
             class="px-4 py-2 border rounded w-1/2">
 
-        <button wire:click="create"
+        <button wire:click="create" wire:confirm.prompt="Are you sure?\n\nType SAVE to confirm|SAVE"
             class="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
             <!-- Plus Icon -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -37,8 +37,8 @@
             <!-- Pencil Icon -->
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="w-5 h-5 mr-1">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652l-9.193 9.193a4.5 
-                              4.5 0 01-1.897 1.13L6 17.25l1.476-4.11a4.5 
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652l-9.193 9.193a4.5
+                              4.5 0 01-1.897 1.13L6 17.25l1.476-4.11a4.5
                               4.5 0 011.13-1.897l8.256-8.256z" />
             </svg>
             Edit Department
@@ -52,7 +52,7 @@
             @endif
         </h3>
 
-        <form wire:submit.prevent="{{ $editMode ? 'update' : 'store' }}" class="space-y-4">
+        <form wire:submit.prevent="{{ $editMode ? 'update' : 'store' }}" wire:confirm.prompt="Are you sure?\n\nType SAVE to confirm|SAVE" class="space-y-4">
             <div>
                 <label class="block font-medium mb-1 text-gray-500">Name</label>
                 <input type="text" wire:model="name" class="w-full px-4 py-2  bg-purple-200 text-gray-500 rounded">
@@ -98,9 +98,9 @@
                     <!-- Pencil Icon -->
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-4 h-4 mr-1">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 
-                                  1.875 0 112.652 2.652l-9.193 9.193a4.5 
-                                  4.5 0 01-1.897 1.13L6 17.25l1.476-4.11a4.5 
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875
+                                  1.875 0 112.652 2.652l-9.193 9.193a4.5
+                                  4.5 0 01-1.897 1.13L6 17.25l1.476-4.11a4.5
                                   4.5 0 011.13-1.897l8.256-8.256z" />
                     </svg>
                     Edit

@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgb(255, 255, 255, 0.6);
+  }
+  .text-shadow-red {
+    text-shadow: 2px 2px 4px rgba(220,38,38,0.6); /* Tailwind red-600 */
+  }
+}
+

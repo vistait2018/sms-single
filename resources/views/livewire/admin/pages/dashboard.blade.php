@@ -1,4 +1,5 @@
 <div>
+     
       <!-- Cards grid -->
                 <div class="grid gap-6 md:grid-cols-3 md:gap-2 mb-8">
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
@@ -28,6 +29,6 @@
                     </div>
 
                 </div>
-     
+
 
             </div>

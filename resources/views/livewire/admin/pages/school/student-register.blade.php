@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center">
         <h1 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Student Registration</h1>
 
-        <button wire:click="$toggle('showStudentForm')"
+        <button wire:click="toggleStudentform"
             class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-xl shadow transition">
             {{ $showStudentForm ? 'View Students' : 'Register New Student' }}
         </button>
@@ -63,9 +63,9 @@
             <!-- Sex -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Sex *</label>
-                <select wire:model="sex"
+                <select wire:model.defer="sex"
                     class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2">
-                    <option value="" disabled>-- Select SeX--</option>
+                    <option value="" >-- Select Sex--</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>
                 </select>
@@ -75,20 +75,15 @@
             <!-- Level -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Class *</label>
-                <select wire:model="selectLevel"
+                <select wire:model.defer="selectLevel"
                     class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2">
-                    <option value="" selected disabled>-- Select Class --</option>
+                    <option value="" >-- Select Class --</option>
                     @foreach($levels as $level)
                     <option value="{{ $level->id }}">{{ $level->name }}</option>
                     @endforeach
                 </select>
 
-                {{-- Show feedback if a class is selected --}}
-                @if($selectLevel)
-                <p class="mt-2 text-green-600">
-                    Selected Level ID: {{ $selectLevel }}
-                </p>
-                @endif
+               
                 @error('selectLevel')
                 <span class="text-red-500 text-xs">{{ $message }}</span>
                 @enderror
@@ -122,7 +117,7 @@
                 <x-input-label for="selectedReligion" :value="__('Religion')" />
                 <select wire:model.live="selectedReligion"
                     class="mt-1 w-full border rounded-md dark:text-gray-700 dark:bg-purple-300 p-2">
-                    <option value="" selected disabled>-- Select --</option>
+                    <option value="" >-- Select --</option>
                     <option value="christianity">Christianity</option>
                     <option value="islam">Islam</option>
                     <option value="others">Others</option>
@@ -200,7 +195,10 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                     </svg>
-                    @if(!$student->user_id)
+                   @php
+                       //dd($student->user?->is_activated   === 0);
+                   @endphp
+               @if(!($student->user?->is_activated))
                     <svg wire:click="addUser({{ $student->id }})" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.5" stroke="currentColor" class="size-4 hover:text-purple-400 text-purple-500">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -297,7 +295,7 @@
             </div>
 
             <div class="col-span-2 mt-6 flex justify-end items-center space-x-2">
-                <button type="button" x-on:click="$dispatch('close-modal', 'editStudent')"
+                <button type="button" wire:click="closeStudentModal"
                     class="px-4 py-2 bg-gray-500 text-white rounded-md">
                     Close
                 </button>
@@ -415,7 +413,7 @@
 
                 <!-- Actions -->
                 <div class="col-span-2 mt-6 flex justify-end items-center space-x-2">
-                    <button type="button" x-on:click="$dispatch('close-modal', 'editStudent')"
+                    <button type="button" wire:click="closeStudentModal"
                         class="px-4 py-2 bg-gray-500 text-white rounded-md">Cancel</button>
                     <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md"
                         wire:loading.attr="disabled">Update</button>
@@ -452,7 +450,7 @@
             <!-- Actions -->
             <div class="col-span-2 mt-6 flex justify-end items-center space-x-2">
                 <button type="button" 
-                        x-on:click="$dispatch('close-modal', 'addUser')" 
+                        wire:click="closeStudentModal"
                         class="px-4 py-2 bg-gray-500 text-white rounded-md">
                     Cancel
                 </button>

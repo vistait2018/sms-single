@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('dob')->nullable();
              $table->string('lin_no')->nullable();
              $table->string('phone_no')->nullable();
-             $table->enum('religion',['chritianity','islam','others'])->nullable();
+             $table->enum('religion',['christianity','islam','others'])->nullable();
             $table->string('national')->default('nigerian');
             $table->string('state_of_origin')->nullable();
             $table->string('previous_school_name')->nullable();

@@ -16,9 +16,10 @@ class EnsureSuperAdmin
     {
         $user = Auth::user();
 
+
+
         if (! $user || ! $user->hasRole('super-admin')) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Unauthorized access.');
+             return abort(403,'Access denied - You are not authorised this .You should not be here' );
         }
 
         return $next($request);

@@ -16,8 +16,22 @@ class TeacherFactory extends Factory
      */
     public function definition(): array
     {
+        $qualification = fake()->randomElement(['BSC','BED','OND','NCE']);
+        $sex = fake()->randomElement(['male','female']);
+
         return [
-            //
+              'first_name' => fake()->name(),
+              'middle_name'=>fake()->name(),
+               'last_name'=>fake()->name(),
+               'address'=>fake()->address(),
+               'qualification'=>$qualification,
+               'date_of_employement'=>fake()->dateTimeBetween(),
+            'sex'=>$sex,
+             'dob'=>fake()->dateTimeThisDecade(),
+               'phone_no' => fake()->phoneNumber(),
+            'religion' => fake()->randomElement(['christianity','islam','others']),
+            'school_id' => 1,
+          
         ];
     }
 }
